@@ -159,7 +159,7 @@ export default function Home() {
           <div className="flex gap-x-4 mt-4">
             <Button onClick={handleCreateNewWallet}>Create New Wallet</Button>
             <Button onClick={handleConnectAccountByMetaMask}>
-              Connect Wallet
+              Login Wallet
             </Button>
             <Button onClick={handleConnectAccount}>Connect Account</Button>
           </div>
