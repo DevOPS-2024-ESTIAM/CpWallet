@@ -1,19 +1,27 @@
-version: '3.8'
+version: "3.8"
 
 services:
   cpwallet:
     container_name: front
-    image: node:18-alpine  # Use a specific version of Node image
+    image: node:18-alpine # Use a specific version of Node image
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
     ports:
       - "80:3000"
-    command: npm run dev  # Simplify command
+    command: npm install -g npm@10.5.0 && npm i && npm i -g next && npm run dev
 
   ganache:
     image: trufflesuite/ganache-cli:latest
     container_name: ganache
     ports:
-      - "8545:8545"  # JSON-RPC port
-    command: ["--accounts", "3", "--defaultBalanceEther", "1000", "--mnemonic", "myth like bonus scare over problem client lizard pioneer" ]
+      - "8545:8545" # JSON-RPC port
+    command:
+      [
+        "--accounts",
+        "3",
+        "--defaultBalanceEther",
+        "1000",
+        "--mnemonic",
+        "myth like bonus scare over problem client lizard pioneer",
+      ]
