@@ -9,7 +9,7 @@ services:
       - .:/usr/src/app
     ports:
       - "80:3000"
-    command: npm install -g npm@10.5.0 && npm i && npm i -g next && npm run dev
+    command: npm run dev
 
   ganache:
     image: trufflesuite/ganache-cli:latest
@@ -23,5 +23,5 @@ services:
         "--defaultBalanceEther",
         "1000",
         "--mnemonic",
-        "myth like bonus scare over problem client lizard pioneer",
+        "myth like bonus scare over problem client lizard pioneer secret smart health",
       ]

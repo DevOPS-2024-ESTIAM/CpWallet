@@ -111,13 +111,16 @@ export default function Home() {
   const handleConnectAccountSubmit = async (formData: {
     address: string;
     mnemonic: string;
+    password: string
   }) => {
     setShowPopup(false);
     setLoading(true);
     try {
       const connectedAccount = await Web3Utils.connectToExistingAccount(
         formData.address,
-        formData.mnemonic
+        formData.mnemonic,
+        formData.password
+
       );
       setAccount(connectedAccount);
       setLoading(false);

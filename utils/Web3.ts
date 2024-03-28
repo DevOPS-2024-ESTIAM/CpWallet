@@ -57,8 +57,9 @@ export const initializeWeb3 = async (): Promise<Web3> => {
 
 export const connectToExistingAccount = async (
   address: string,
+  myPassword: string,
   mnemonic: string
-): Promise<{ address: string; privateKey: string }> => {
+): Promise<{ address: string; privateKey: any }> => {
   try {
     const web3Instance = await initializeWeb3();
     const accounts = await web3Instance.eth.getAccounts();
@@ -69,16 +70,18 @@ export const connectToExistingAccount = async (
     if (!account) {
       throw new Error("Account not found");
     }
-    const hdwallet = require("ethereumjs-wallet").hdkey.fromMasterSeed(
-      web3Instance.utils.toHex(mnemonic)
-    );
-    const wallet = hdwallet
-      .derivePath(`m/44'/60'/0'/0/${accounts.indexOf(account)}`)
-      .getWallet();
-    const privateKey = "0x" + wallet.getPrivateKey().toString("hex");
+    const wallet = web3Instance.eth.wallet?.decrypt(mnemonic, myPassword)
+    // const hdwallet = require("ethereumjs-wallet").hdkey.fromMasterSeed(
+    //   web3Instance.utils.toHex(myPassword)
+    // );
+    // const wallet = hdwallet
+    //   .derivePath(`m/44'/60'/0'/0/${accounts.indexOf(account)}`)
+    //   .getWallet();
+    // const privateKey = "0x" + wallet.getPrivateKey().toString("hex");
 
-    console.log(`Connected to account: ${account}`);
-    return { address: account, privateKey: privateKey };
+    console.log(`Connected to account: ${wallet}`);
+    return { address: account, privateKey: wallet };
+    
   } catch (error: any) {
     throw new Error(`Error connecting to existing account: ${error.message}`);
   }
@@ -103,15 +106,12 @@ export const createAccount = async (): Promise<{
     // Create a new account
     const newAccount = web3Instance.eth.accounts.create();
     // Import the new account into Ganache
-    const password = "your_password"; // Choose a password to encrypt the private key
-    await web3Instance.eth.personal.importRawKey(
-      newAccount.privateKey,
-      password
-    );
-
+    const password = "test123"; // Choose a password to encrypt the private key
+    // await web3Instance.eth.accounts.encrypt(newAccount.privateKey, password)
+    await newAccount.encrypt(password)
+  
     console.log("New account imported successfully to Ganache:");
-    console.log("Address:", newAccount.address);
-    console.log("Private Key:", newAccount.privateKey);
+    console.log("new Account: ", newAccount);
     sendEther(newAccount.address, 1); // Send Ether to the new account
 
     return { address: newAccount.address, privateKey: newAccount.privateKey };
@@ -206,8 +206,8 @@ export async function sendTransaction(
     from: senderAddress,
     to: recipientAddress,
     value: web3Instance.utils.toWei(value.toString(), "ether"), // Convert value to wei
-    gas: 21000, // Adjust gas limit as needed
-    gasPrice: await web3Instance.eth.getGasPrice(), // Get the current gas price
+    gas: getGasPrice(), // Adjust gas limit as needed
+    gasPrice: getGasPrice(), // Get the current gas price
   };
   console.log("Transaction object:", txObject);
 

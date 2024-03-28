@@ -1,15 +1,17 @@
 "use client";
-import { use, useEffect, useState } from "react";
-import Web3Utils, { delay } from "@/utils/Web3"; 
+import { useEffect, useState } from "react";
+import Web3Utils from "@/utils/Web3"; 
 import { test } from "@/utils/test";
 
 export default function Page() {
   const [accounts, setAccounts] = useState<string[]>([]);
   const [accountBalances, setAccountBalances] = useState<string[]>([]);
+  const [transaction, setTransaction] = useState<{}>({})
   const handleTest = async () => {
     try {
-      const testResult = await test();
+      const testResult: any = await test();
       console.log("Test:", testResult);
+      setTransaction(testResult)
     } catch (error) {
       console.error("Error:", error);
     }
@@ -22,9 +24,10 @@ export default function Page() {
         accounts.map((account) => Web3Utils.getAccountBalance(account))
       );
       setAccountBalances(balances);
+      console.log("fetch accounts")
     };
     fetchAccounts();
-  }, [accountBalances]);
+  }, [transaction]);
   return (
     <div className="text-black">
       <p>This is the page</p>

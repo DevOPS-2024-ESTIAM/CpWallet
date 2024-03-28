@@ -1,9 +1,9 @@
-import { on } from "events";
 import React, { useState } from "react";
 
 interface ConnectAccountForm {
   address: string;
   mnemonic: string;
+  password: string
 }
 
 interface TransactionForm {
@@ -26,7 +26,7 @@ const Popup: React.FC<PopupProps> = ({
 }) => {
   const initialFormData =
     popupType === "connectAccount"
-      ? { address: "", mnemonic: "" }
+      ? { address: "", mnemonic: "", password: "" }
       : { to: "", value: "" };
 
   const [formData, setFormData] = useState<
@@ -83,6 +83,18 @@ const Popup: React.FC<PopupProps> = ({
                 />
               </div>
               <div className="mb-4">
+                <label htmlFor="mnemonic">Mot de passe:</label>
+                <input
+                  type="text"
+                  id="password"
+                  name="password"
+                  value={(formData as ConnectAccountForm).password || ""}
+                  onChange={handleChange}
+                  placeholder="Enter mnemonic"
+                  className="border border-gray-300 rounded-md w-full px-3 py-2"
+                />
+              </div>
+              <div className="mb-4">
                 <label htmlFor="mnemonic">Mnemonic:</label>
                 <input
                   type="text"
@@ -124,6 +136,7 @@ const Popup: React.FC<PopupProps> = ({
               </div>
             </>
           )}
+          <p>myth like bonus scare over problem client lizard pioneer secret smart health</p>
           <div className="flex justify-center">
             <button
               className="bg-blue-500  rounded px-4 py-2 mr-2"
